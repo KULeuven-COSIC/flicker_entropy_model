@@ -1,0 +1,6 @@
+*.pyc
+figures/data/
+figures/pdf/
+figures/svg/
+.vscode/
+.DS_Store
