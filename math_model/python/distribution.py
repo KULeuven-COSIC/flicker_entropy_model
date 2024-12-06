@@ -6,7 +6,7 @@ from typing import List, Optional, Tuple, Any, Union
 import matplotlib.pyplot as plt # type: ignore
 import numpy as np
 sys.path.append(getcwd())
-from math_model.python import data_reader
+from math_model.python import data_reader # pylint: disable=wrong-import-position
 
 class Distribution:
     """A class representing a distribution created from emperical samples."""

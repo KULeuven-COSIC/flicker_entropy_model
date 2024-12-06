@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 from scipy import optimize # type: ignore
 import numpy as np
 sys.path.append(getcwd())
-from math_model.python import noises
-from math_model.python import data_reader as d_r
-from lib import time_logger as t_l
+from math_model.python import noises # pylint: disable=wrong-import-position
+from math_model.python import data_reader as d_r # pylint: disable=wrong-import-position
+from lib import time_logger as t_l # pylint: disable=wrong-import-position
 
 class JitterGen:
     """Jitter measurement simulation class."""
@@ -129,8 +129,8 @@ class JitterManager:
         """Get the stored phases."""
         raw_data = cast(List[List[float]], self._data_man.get_data())
         for exp in raw_data:
-            for i, (p, np) in enumerate(zip(exp, self._nom_phases)):
-                exp[i] = p + np
+            for i, (p, np_i) in enumerate(zip(exp, self._nom_phases)):
+                exp[i] = p + np_i
         return raw_data
 
     def plot_data(self) -> None:
@@ -185,22 +185,22 @@ class JitterManager:
         for jit_man, s_color, t_color in zip(jit_mans, JitterManager._sample_colors,
                                              JitterManager._theo_colors):
             data = jit_man.get_data()
-            hf = jit_man._gen_data.hs[jit_man._gen_data.noise_classes.index(noises.FlickerFMNoise)]
-            hw = jit_man._gen_data.hs[jit_man._gen_data.noise_classes.index(noises.WhiteFMNoise)]
-            print(f'fn: {jit_man._gen_data.fn}, hf: {hf}, hw: {hw}, {len(data)} experiments.')
-            nb_accs = len(jit_man._acc_times)
+            hf = jit_man._gen_data.hs[jit_man._gen_data.noise_classes.index(noises.FlickerFMNoise)] # pylint: disable=protected-access
+            hw = jit_man._gen_data.hs[jit_man._gen_data.noise_classes.index(noises.WhiteFMNoise)] # pylint: disable=protected-access
+            print(f'fn: {jit_man._gen_data.fn}, hf: {hf}, hw: {hw}, {len(data)} experiments.') # pylint: disable=protected-access
+            nb_accs = len(jit_man._acc_times) # pylint: disable=protected-access
             phase_vars: List[float] = [0] * nb_accs
             for phase_index in range(nb_accs):
                 phase_vars[phase_index] = np.var([exp[phase_index] # type: ignore
                                                   for exp in data])
-            axs[1].plot(jit_man._acc_times, phase_vars, marker='o', color=s_color, # type: ignore
+            axs[1].plot(jit_man._acc_times, phase_vars, marker='o', color=s_color, # type: ignore # pylint: disable=protected-access
                         alpha=0.5,
-                        label=f'fn: {jit_man._gen_data.fn:9.3e}, hf: {hf:9.3e}, hw: {hw:9.3e}')
+                        label=f'fn: {jit_man._gen_data.fn:9.3e}, hf: {hf:9.3e}, hw: {hw:9.3e}') # pylint: disable=protected-access
             theo_vars = jit_man.calc_theoretical_phase_vars()
-            for theo_var, noise_class in zip(theo_vars, jit_man._gen_data.noise_classes):
+            for theo_var, noise_class in zip(theo_vars, jit_man._gen_data.noise_classes): # pylint: disable=protected-access
                 line_style = 'solid' if noise_class.short_title == 'wfm' else 'dashed'
                 label_h = f'hw: {hw:9.3e}' if noise_class.short_title == 'wfm' else f'hf: {hf:9.3e}'
-                axs[1].plot(jit_man._acc_times, theo_var, alpha=1, # type: ignore
+                axs[1].plot(jit_man._acc_times, theo_var, alpha=1, # type: ignore # pylint: disable=protected-access
                             label=f'{noise_class.short_title}, {label_h}',
                             color=t_color, linestyle=line_style)
         for jit_man, t_color in zip(jit_mans, JitterManager._theo_colors):
@@ -267,5 +267,7 @@ class JitterManager:
             print('Error, no white noise present.')
             return -1
         hw = self._gen_data.hs[self._gen_data.noise_classes.index(noises.WhiteFMNoise)]
-        f = lambda t: hw - hf * t * (3 - 2 * np.euler_gamma - 2 * np.log(2 * np.pi * self._gen_data.freq_bound.fl * t))
+        def f(t: float) -> float:
+            return hw - hf * t * (3 - 2 * np.euler_gamma \
+                                  - 2 * np.log(2 * np.pi * self._gen_data.freq_bound.fl * t))
         return optimize.root(f, 40e-9).x[0]

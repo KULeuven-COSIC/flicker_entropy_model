@@ -7,7 +7,7 @@ import csv
 from typing import Optional, List, Any, Dict, Tuple, Type
 import numpy as np
 sys.path.append(getcwd())
-from math_model.python import distribution
+from math_model.python import distribution # pylint: disable=wrong-import-position
 
 class DataManager:
     """A class containing data managing functionality."""
