@@ -5,3 +5,8 @@ figures/svg/
 .vscode/
 .DS_Store
 __pycache__/
+latex/
+math_model/python/main_jitter.py
+math_model/python/main_one_bit.py
+math_model/python/monte_carlo_integrate.py
+math_model/python/plotter.py
