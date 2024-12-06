@@ -9,7 +9,7 @@ This archive contains the following folders:
 - *figures/*: Contains Python scripts to generate the figures in the publications below and visualizes the simulation results.
 - *lib/*: Contains helper Python scripts and figure generation options.
 
-## Publications
+## Publication
 
 The data contained in this archive supports the following publication:
 - Adriaan Peetermans, and Ingrid Verbauwhede. **[TRNG Entropy Model in the Presence of Flicker FM Noise](https://tches.iacr.org/index.php/TCHES/article/view/11793)**. In: *IACR Transactions on Cryptographic Hardware and Embedded Systems (TCHES)*, vol. 2024, no. 4, pp. 285-306, 2024.
